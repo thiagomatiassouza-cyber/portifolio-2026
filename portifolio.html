@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio 2027 - Meus Trabalhos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/20">
+                        27
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                            Portfólio <span class="text-brand-500">2027</span>
+                        </h1>
+                        <p class="text-xs text-slate-400">Jornada & Projetos do Ano</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="openModalBtn" onclick="openModal()" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 transition-all duration-200 shadow-lg shadow-brand-600/30 hover:shadow-brand-500/50 active:scale-95">
+                        <i class="fa-solid fa-plus mr-2"></i> Adicionar Projeto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- Banner / Welcome -->
+        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800/80 p-8 mb-10 shadow-2xl">
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-2xl">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-4">
+                    <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                    Ano Letivo & Profissional 2027
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                    Registre e exiba suas conquistas em 2027.
+                </h2>
+                <p class="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Comece hoje a catalogar cada trabalho, estudo, protótipo ou projeto concluído. Tudo fica salvo automaticamente no seu navegador.
+                </p>
+            </div>
+            
+            <!-- Dashboard Quick Stats -->
+            <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-lg">
+                <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl backdrop-blur-sm">
+                    <span class="text-xs text-slate-400 font-medium block">Total de Projetos</span>
+                    <span id="statTotal" class="text-2xl font-bold text-white mt-1 block">0</span>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl backdrop-blur-sm">
+                    <span class="text-xs text-slate-400 font-medium block">Categorias</span>
+                    <span id="statCategories" class="text-2xl font-bold text-brand-400 mt-1 block">0</span>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl backdrop-blur-sm col-span-2 sm:col-span-1">
+                    <span class="text-xs text-slate-400 font-medium block">Última Atualização</span>
+                    <span id="statLastAdded" class="text-sm font-semibold text-slate-300 mt-2 block truncate">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters & Search Bar -->
+        <section class="mb-8 space-y-4">
+            <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                <!-- Search -->
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="text" id="searchInput" oninput="filterProjects()" placeholder="Buscar projetos por título ou descrição..." class="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-800 rounded-2xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                </div>
+
+                <!-- Category Filters (Horizontal Scroll on Mobile) -->
+                <div id="categoryFilters" class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+                    <!-- Dynamic Badges Inserted Here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Grid -->
+        <section id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Project Cards inserted dynamically via JavaScript -->
+        </section>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16 px-4 bg-slate-900/40 rounded-3xl border border-dashed border-slate-800">
+            <div class="w-16 h-16 bg-slate-800/80 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-300">Nenhum projeto encontrado</h3>
+            <p class="text-slate-500 text-sm max-w-md mx-auto mt-1" id="emptyMessage">
+                Você ainda não adicionou nenhum projeto para o ano de 2027. Clique no botão acima para começar!
+            </p>
+            <button onclick="openModal()" class="mt-6 px-4 py-2.5 text-sm font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl transition border border-slate-700">
+                <i class="fa-solid fa-plus mr-1.5"></i> Criar primeiro projeto
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Portfólio Pessoal 2027 &bull; Salvo localmente no seu dispositivo</p>
+        </div>
+    </footer>
+
+    <!-- Add/Edit Project Modal -->
+    <div id="projectModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl transform transition-all">
+            <!-- Modal Header -->
+            <div class="px-6 py-5 border-b border-slate-800 flex items-center justify-between">
+                <h3 id="modalTitle" class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-square-plus text-brand-500"></i> Novo Projeto 2027
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200 p-2 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="projectForm" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4">
+                <input type="hidden" id="projectId">
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Título do Projeto *</label>
+                    <input type="text" id="inputTitle" required placeholder="Ex: Sistema de Gestão Inteligente" class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 transition text-sm">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">Categoria *</label>
+                        <input type="text" id="inputCategory" required placeholder="Ex: Programação, Design, Redação..." class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 transition text-sm" list="categorySuggestions">
+                        <datalist id="categorySuggestions">
+                            <option value="Desenvolvimento Web"></option>
+                            <option value="Design & UI/UX"></option>
+                            <option value="Mobile App"></option>
+                            <option value="Inteligência Artificial"></option>
+                            <option value="Acadêmico / Estudos"></option>
+                        </datalist>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1.5">Data de Conclusão *</label>
+                        <input type="date" id="inputDate" required class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-brand-500 transition text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">URL da Imagem de Capa (Opcional)</label>
+                    <input type="url" id="inputImage" placeholder="https://images.unsplash.com/photo-..." class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 transition text-sm">
+                    <span class="text-[11px] text-slate-500 mt-1 block">Deixe em branco para usar uma capa padronizada.</span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Link Externo / GitHub / Demo (Opcional)</label>
+                    <input type="url" id="inputLink" placeholder="https://meu-projeto.com" class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 transition text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Descrição do Trabalho *</label>
+                    <textarea id="inputDescription" rows="4" required placeholder="Explique brevemente o que foi feito neste projeto, tecnologias usadas, aprendizados..." class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 transition text-sm resize-none"></textarea>
+                </div>
+
+                <!-- Modal Actions -->
+                <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 transition shadow-lg shadow-brand-600/30">
+                        <i class="fa-solid fa-floppy-disk mr-1.5"></i> Salvar Projeto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Project Modal (Details) -->
+    <div id="viewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl transform transition-all">
+            <div class="relative h-56 sm:h-72 w-full bg-slate-950 overflow-hidden">
+                <img id="viewImage" src="" alt="Capa do Projeto" class="w-full h-full object-cover">
+                <button onclick="closeViewModal()" class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md text-slate-300 hover:text-white p-2.5 rounded-full hover:bg-slate-900 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+                <div class="absolute bottom-4 left-4">
+                    <span id="viewCategory" class="px-3 py-1 bg-brand-600/90 text-white font-medium text-xs rounded-full backdrop-blur-md"></span>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h2 id="viewTitle" class="text-2xl font-bold text-white leading-tight"></h2>
+                        <span id="viewDate" class="text-xs text-slate-400 mt-1 block"></span>
+                    </div>
+                    <div id="viewLinkContainer">
+                        <!-- Dynamic Link Button -->
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-800 pt-4">
+                    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Sobre o Projeto</h4>
+                    <p id="viewDescription" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></p>
+                </div>
+
+                <div class="flex justify-between items-center pt-4 border-t border-slate-800">
+                    <div class="flex space-x-2">
+                        <button id="viewEditBtn" class="px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Editar
+                        </button>
+                        <button id="viewDeleteBtn" class="px-3.5 py-2 text-xs font-semibold text-red-400 hover:text-red-300 bg-red-950/40 hover:bg-red-900/40 border border-red-900/50 rounded-xl transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Excluir
+                        </button>
+                    </div>
+                    <button onclick="closeViewModal()" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden flex items-center gap-3 px-4 py-3 bg-slate-900 border border-slate-800 text-slate-200 text-sm rounded-2xl shadow-2xl transition-all transform translate-y-4">
+        <div id="toastIcon" class="text-brand-500">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <span id="toastMessage">Operação realizada com sucesso!</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Storage Key
+        const STORAGE_KEY = 'portfolio_2027_projects';
+
+        // State Variables
+        let projects = [];
+        let activeCategory = 'Todas';
+
+        // Sample Data for 2027 initial experience (if local storage empty)
+        const sampleProjects = [
+            {
+                id: '1',
+                title: 'Design System & UI Kit 2027',
+                category: 'Design & UI/UX',
+                date: '2027-01-15',
+                image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
+                link: 'https://github.com',
+                description: 'Criação de um Design System acessível e moderno com suporte a modo escuro, micro-interações e suporte para frameworks modernos.'
+            },
+            {
+                id: '2',
+                title: 'Assistente IA de Produtividade',
+                category: 'Inteligência Artificial',
+                date: '2027-02-10',
+                image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80',
+                link: 'https://openai.com',
+                description: 'Aplicação web utilizando APIs avançadas de IA para automação de tarefas diárias, resumos de documentos e agendamento inteligente.'
+            }
+        ];
+
+        // Initialization
+        window.onload = function() {
+            loadProjects();
+            // Set default date input to today in 2027 or current date
+            const today = new Date();
+            const year = today.getFullYear() < 2027 ? 2027 : today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('inputDate').value = `${year}-${month}-${day}`;
+        };
+
+        // Load Projects from localStorage
+        function loadProjects() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                try {
+                    projects = JSON.parse(data);
+                } catch (e) {
+                    projects = [...sampleProjects];
+                }
+            } else {
+                projects = [...sampleProjects];
+                saveToLocalStorage();
+            }
+            renderApp();
+        }
+
+        // Save Projects to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        }
+
+        // Render Entire Application UI
+        function renderApp() {
+            renderCategoryFilters();
+            renderProjectsGrid();
+            updateStats();
+        }
+
+        // Render Category Filter Badges
+        function renderCategoryFilters() {
+            const container = document.getElementById('categoryFilters');
+            const categories = ['Todas', ...new Set(projects.map(p => p.category.trim()).filter(Boolean))];
+
+            container.innerHTML = categories.map(cat => {
+                const isActive = activeCategory === cat;
+                return `
+                    <button onclick="setCategory('${cat}')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+                        isActive 
+                        ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20' 
+                        : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }">
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Set Active Category Filter
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategoryFilters();
+            renderProjectsGrid();
+        }
+
+        // Filter and Render Projects Cards
+        function renderProjectsGrid() {
+            const grid = document.getElementById('projectsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            const filtered = projects.filter(p => {
+                const matchesCategory = activeCategory === 'Todas' || p.category === activeCategory;
+                const matchesSearch = p.title.toLowerCase().includes(searchTerm) || 
+                                     p.description.toLowerCase().includes(searchTerm) ||
+                                     p.category.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+
+            // Sort by Date (newest first)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+
+                grid.innerHTML = filtered.map(project => {
+                    const defaultImg = 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80';
+                    const imgUrl = project.image && project.image.trim() !== '' ? project.image : defaultImg;
+                    const formattedDate = formatDate(project.date);
+
+                    return `
+                        <article class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden card-hover flex flex-col justify-between group shadow-lg">
+                            <div>
+                                <!-- Image Container -->
+                                <div class="relative h-48 w-full overflow-hidden bg-slate-950 cursor-pointer" onclick="openViewModal('${project.id}')">
+                                    <img src="${imgUrl}" alt="${escapeHtml(project.title)}" 
+                                         onerror="this.onerror=null; this.src='${defaultImg}';"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
+                                    <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md border border-slate-700/50 text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">
+                                        ${escapeHtml(project.category)}
+                                    </span>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="p-5">
+                                    <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                                        <span><i class="fa-regular fa-calendar-check mr-1 text-brand-500"></i> ${formattedDate}</span>
+                                    </div>
+                                    <h3 onclick="openViewModal('${project.id}')" class="text-base font-bold text-slate-100 group-hover:text-brand-400 transition cursor-pointer line-clamp-1">
+                                        ${escapeHtml(project.title)}
+                                    </h3>
+                                    <p class="text-slate-400 text-xs mt-2 line-clamp-3 leading-relaxed">
+                                        ${escapeHtml(project.description)}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Footer Actions -->
+                            <div class="px-5 py-4 bg-slate-900/50 border-t border-slate-800/80 flex items-center justify-between">
+                                <button onclick="openViewModal('${project.id}')" class="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1 transition">
+                                    Ver Detalhes <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </button>
+                                
+                                <div class="flex items-center space-x-1">
+                                    ${project.link ? `
+                                        <a href="${project.link}" target="_blank" rel="noopener noreferrer" title="Abrir link externo" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition text-xs">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    ` : ''}
+                                    <button onclick="editProject('${project.id}')" title="Editar" class="p-2 text-slate-400 hover:text-brand-400 rounded-lg hover:bg-slate-800 transition text-xs">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                    <button onclick="deleteProject('${project.id}')" title="Excluir" class="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition text-xs">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Update Dashboard Quick Stats
+        function updateStats() {
+            document.getElementById('statTotal').innerText = projects.length;
+            
+            const categories = new Set(projects.map(p => p.category.trim()).filter(Boolean));
+            document.getElementById('statCategories').innerText = categories.size;
+
+            if (projects.length > 0) {
+                const sorted = [...projects].sort((a, b) => new Date(b.date) - new Date(a.date));
+                document.getElementById('statLastAdded').innerText = sorted[0].title;
+            } else {
+                document.getElementById('statLastAdded').innerText = 'Nenhum';
+            }
+        }
+
+        // Filter search input
+        function filterProjects() {
+            renderProjectsGrid();
+        }
+
+        // Form Submit Handler (Add / Edit)
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('projectId').value;
+            const title = document.getElementById('inputTitle').value.trim();
+            const category = document.getElementById('inputCategory').value.trim();
+            const date = document.getElementById('inputDate').value;
+            const image = document.getElementById('inputImage').value.trim();
+            const link = document.getElementById('inputLink').value.trim();
+            const description = document.getElementById('inputDescription').value.trim();
+
+            if (id) {
+                // Edit existing
+                const index = projects.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    projects[index] = { id, title, category, date, image, link, description };
+                    showToast('Projeto atualizado com sucesso!');
+                }
+            } else {
+                // Add new
+                const newProject = {
+                    id: Date.now().toString(),
+                    title,
+                    category,
+                    date,
+                    image,
+                    link,
+                    description
+                };
+                projects.unshift(newProject);
+                showToast('Novo projeto adicionado para 2027!');
+            }
+
+            saveToLocalStorage();
+            renderApp();
+            closeModal();
+        }
+
+        // Edit Project
+        function editProject(id) {
+            closeViewModal();
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            document.getElementById('projectId').value = project.id;
+            document.getElementById('inputTitle').value = project.title;
+            document.getElementById('inputCategory').value = project.category;
+            document.getElementById('inputDate').value = project.date;
+            document.getElementById('inputImage').value = project.image || '';
+            document.getElementById('inputLink').value = project.link || '';
+            document.getElementById('inputDescription').value = project.description;
+
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-brand-500"></i> Editar Projeto`;
+            openModal();
+        }
+
+        // Delete Project
+        function deleteProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            // Custom confirm logic using standard JS UI (non-alert)
+            if (confirm(`Tem certeza que deseja remover o projeto "${project.title}"?`)) {
+                projects = projects.filter(p => p.id !== id);
+                saveToLocalStorage();
+                renderApp();
+                closeViewModal();
+                showToast('Projeto excluído com sucesso.', 'info');
+            }
+        }
+
+        // Modal Controls
+        function openModal() {
+            document.getElementById('projectModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('projectModal').classList.add('hidden');
+            document.getElementById('projectForm').reset();
+            document.getElementById('projectId').value = '';
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-square-plus text-brand-500"></i> Novo Projeto 2027`;
+        }
+
+        // View Details Modal
+        function openViewModal(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            const defaultImg = 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80';
+            
+            document.getElementById('viewImage').src = project.image && project.image.trim() !== '' ? project.image : defaultImg;
+            document.getElementById('viewTitle').innerText = project.title;
+            document.getElementById('viewCategory').innerText = project.category;
+            document.getElementById('viewDate').innerText = `Concluído em: ${formatDate(project.date)}`;
+            document.getElementById('viewDescription').innerText = project.description;
+
+            const linkContainer = document.getElementById('viewLinkContainer');
+            if (project.link) {
+                linkContainer.innerHTML = `
+                    <a href="${project.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition shadow-md shadow-brand-600/30">
+                        <i class="fa-solid fa-external-link mr-1.5"></i> Acessar Link
+                    </a>
+                `;
+            } else {
+                linkContainer.innerHTML = '';
+            }
+
+            document.getElementById('viewEditBtn').onclick = () => editProject(project.id);
+            document.getElementById('viewDeleteBtn').onclick = () => deleteProject(project.id);
+
+            document.getElementById('viewModal').classList.remove('hidden');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.add('hidden');
+        }
+
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMessage.innerText = message;
+            if (type === 'success') {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+            } else {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-info text-brand-400"></i>`;
+            }
+
+            toast.classList.remove('hidden', 'translate-y-4');
+            toast.classList.add('translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-4');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        // Utility: Format Date (YYYY-MM-DD to PT-BR)
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Utility: Escape HTML for security
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
